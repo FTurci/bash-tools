@@ -1,4 +1,13 @@
 #!/bin/bash
 
-find $1 -type f -exec stat --format '%Y :%y %n' "{}" \; | sort -nr | cut -d: -f2- | head
+if [ $# -eq 0 ]; then
+    folder=.
+else
+    folder=$1
+fi
 
+if [[ $(uname -s) == Darwin ]]; then
+find $folder -type f -exec gstat --format '%Y :%y %n' "{}" \; | sort -nr | cut -d: -f2- | head
+else
+ find $folder -type f -exec stat --format '%Y :%y %n' "{}" \; | sort -nr | cut -d: -f2- | head
+fi
